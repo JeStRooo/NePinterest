@@ -1,13 +1,16 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-import { Header } from '@/modules/Header'
+import dynamic from 'next/dynamic'
+import { Provider } from 'react-redux'
+import { store } from '@/store'
+
+const HomePage = dynamic(
+  () => import('@/modules/HomePage').then((module) => module.HomePage),
+  { ssr: false },
+)
 
 export default function Home() {
   return (
-    <>
-      <Header />
-    </>
+    <Provider store={store}>
+      <HomePage />
+    </Provider>
   )
 }

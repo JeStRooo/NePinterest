@@ -1,0 +1,48 @@
+.header {
+  position: fixed;
+  top: 0;
+  background-color: #fff;
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 8px 8px -8px;
+  transition: box-shadow 300ms ease-in-out 0s;
+  z-index: 10;
+}
+
+.container {
+  height: 64px;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 300px;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.logoName {
+  background: -moz-linear-gradient(right, #ffcc00, red);
+  background: -webkit-linear-gradient(right, #ffcc00, red);
+  background: linear-gradient(to right, #ffcc00, red);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+  'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+  'Noto Color Emoji';
+}
+
+.searchContainer {
+  width: 800px;
+}
+
+.empty {
+  width: 300px;
+}
