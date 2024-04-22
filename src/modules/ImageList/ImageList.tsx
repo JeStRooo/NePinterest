@@ -17,7 +17,7 @@ import ErrorImage from '@/assets/images/404.gif'
 export const ImageList: FC<IImageList> = ({ photos, error, isLoading }) => {
   const [{ isShowModal, id }, setIsShowModal] = useState(defaultModalState)
 
-  if (error || !photos?.length) {
+  if (error) {
     return (
       <div className={styles.messageContainer}>
         <Image
@@ -57,9 +57,12 @@ export const ImageList: FC<IImageList> = ({ photos, error, isLoading }) => {
         {photos?.map((photo) => (
           <div key={photo.id} className={styles.imageContainer}>
             <AntImage
-              src={photo?.urls?.small}
+              src={photo?.urls?.regular}
               className={styles.image}
               loading='lazy'
+              preview={{
+                maskClassName: styles.customMask,
+              }}
             />
             <EllipsisOutlined
               className={styles.moreInfo}
@@ -69,7 +72,8 @@ export const ImageList: FC<IImageList> = ({ photos, error, isLoading }) => {
               <Modal
                 isOpen={isShowModal}
                 onCancel={handleClose}
-                downloadLink={photo?.links.download}
+                downloadLink={photo?.links.download_location}
+                copyImageLink={photo?.urls?.regular}
               />
             )}
           </div>

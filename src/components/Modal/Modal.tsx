@@ -9,18 +9,28 @@ import { HeartSvg } from '@/assets/images/HeartIcon'
 
 import styles from './styles.module.scss'
 
-export const Modal: FC<IModal> = ({ isOpen, onCancel, downloadLink }) => {
+export const Modal: FC<IModal> = ({
+  isOpen,
+  onCancel,
+  downloadLink,
+  copyImageLink,
+}) => {
   const [messageApi, contextHolder] = message.useMessage()
 
   const handleDownLoadPhoto = () => {
     if (typeof window !== 'undefined') {
-      const link = document.createElement('a')
-      link.href = downloadLink
-      link.download = 'photo.jpg'
-      document.body.appendChild(link)
-
-      link.click()
-      document.body.removeChild(link)
+      fetch(downloadLink + `&client_id=${process.env.NEXT_PUBLIC_ACCESS_KEY}`)
+        .then((response) => response.json()) // Преобразуем ответ в JSON
+        .then((data) => {
+          const imageUrl = data.url
+          const link = document.createElement('a')
+          link.href = imageUrl
+          link.download = 'photo.jpg'
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+        })
+        .catch((error) => console.error('Error downloading photo:', error))
     }
   }
   const success = () => {
@@ -32,7 +42,7 @@ export const Modal: FC<IModal> = ({ isOpen, onCancel, downloadLink }) => {
 
   const handleCopyLink = () => {
     success()
-    return navigator.clipboard.writeText(downloadLink)
+    return navigator.clipboard.writeText(copyImageLink)
   }
 
   return (

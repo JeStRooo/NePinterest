@@ -13,7 +13,7 @@ type TUrls = {
 
 type TLinks = {
   self: string
-  download: string
+  download_location: string
 }
 
 export interface IPhoto {

@@ -7,14 +7,6 @@
   margin-top: 120px;
   gap: 10px !important;
   max-width: 850px;
-
-  :global {
-    .ant-image-img.ant-image-mask {
-      border-radius: 20px;
-      background-color: red;
-      opacity: 0.5;
-    }
-  }
 }
 
 .imageContainer {
@@ -22,6 +14,11 @@
   flex-direction: column;
   align-items: flex-end;
   margin-bottom: 4px;
+  gap: 8px;
+}
+
+.customMask {
+  border-radius: 20px;
 }
 
 .image {
@@ -35,6 +32,11 @@
   margin-right: 10px;
   cursor: pointer;
   padding: 6px;
+
+  &:hover {
+    background: #f5f6f8;
+    border-radius: 8px;
+  }
 }
 
 .messageContainer {

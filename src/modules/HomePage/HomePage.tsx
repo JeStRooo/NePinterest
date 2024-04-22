@@ -1,28 +1,24 @@
 import React, { useEffect, useState } from 'react'
-
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Header } from '@/modules/Header'
 import { ImageList } from '@/modules/ImageList'
-
 import {
   useGetPhotosQuery,
   useSearchPhotosQuery,
 } from '@/store/service/photoApi'
+import { IPhoto } from '@/store/types'
 
 export const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  const [maxPhotoOnPage, setMaxPhotoOnPage] = useState(10)
   const [page, setPage] = useState(1)
+  const [resultPhotos, setResultPhotos] = useState<IPhoto[]>([])
+  const [firstSearchQuery, setFirstSearchQuery] = useState(true)
 
   const {
     data: searchResults,
     isLoading: searchLoading,
     error: searchError,
-  } = useSearchPhotosQuery({
-    page,
-    per_page: maxPhotoOnPage,
-    query: searchQuery,
-  })
+  } = useSearchPhotosQuery({ page, query: searchQuery, per_page: 30 })
 
   const {
     data: allPhotos,
@@ -30,41 +26,41 @@ export const HomePage = () => {
     error: allPhotosError,
   } = useGetPhotosQuery({
     page,
-    per_page: maxPhotoOnPage,
+    per_page: 30,
   })
 
-  const isLoading = searchQuery ? searchLoading : allPhotosLoading
-  const error = searchQuery ? searchError : allPhotosError
-  const photos = searchQuery ? searchResults?.results : allPhotos
+  const isLoading = !!searchQuery ? searchLoading : allPhotosLoading
+  const error = !!searchQuery ? searchError : allPhotosError
+  const photos = !!searchQuery ? searchResults?.results : allPhotos
 
   const handleSearchQuery = (value: string) => {
     setSearchQuery(value)
+    setPage(1)
   }
 
   const loadMore = () => {
-    setMaxPhotoOnPage((prevState) => prevState + 10)
-
-    if (maxPhotoOnPage === 40) {
-      setPage((prevState) => prevState + 1)
-    }
+    setPage((prevPage) => prevPage + 1)
   }
 
-  // useEffect(() => {
-  //   if (maxPhotoOnPage === 40) {
-  //     setPage((prevState) => prevState + 1)
-  //   }
-  // }, [maxPhotoOnPage])
+  useEffect(() => {
+    if (searchQuery && firstSearchQuery) {
+      setResultPhotos(photos || [])
+      setFirstSearchQuery(false)
+    } else {
+      setResultPhotos((prevPhotos) => [...prevPhotos, ...(photos || [])])
+    }
+  }, [searchQuery, photos, firstSearchQuery])
 
   return (
     <>
       <Header searchQuery={searchQuery} handleSearchQuery={handleSearchQuery} />
       <InfiniteScroll
-        dataLength={photos ? photos.length : 0}
+        dataLength={resultPhotos.length}
         next={loadMore}
-        hasMore={!isLoading && !error}
+        hasMore={!!photos && photos.length >= 30}
         loader={<p></p>}
       >
-        <ImageList photos={photos!} error={error} isLoading={isLoading} />
+        <ImageList photos={resultPhotos} error={error!} isLoading={isLoading} />
       </InfiniteScroll>
     </>
   )
