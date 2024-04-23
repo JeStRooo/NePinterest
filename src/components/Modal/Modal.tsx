@@ -19,20 +19,34 @@ export const Modal: FC<IModal> = ({
 
   const handleDownLoadPhoto = () => {
     if (typeof window !== 'undefined') {
-      fetch(downloadLink + `&client_id=${process.env.NEXT_PUBLIC_ACCESS_KEY}`)
-        .then((response) => response.json()) // Преобразуем ответ в JSON
+      const str =
+        downloadLink + `&client_id=${process.env.NEXT_PUBLIC_ACCESS_KEY}`
+
+      fetch(str)
+        .then((response) => response.json())
         .then((data) => {
           const imageUrl = data.url
-          const link = document.createElement('a')
-          link.href = imageUrl
-          link.download = 'photo.jpg'
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link)
+
+          fetch(imageUrl)
+            .then((response) => response.blob())
+            .then((blob) => {
+              const url = URL.createObjectURL(blob)
+
+              const link = document.createElement('a')
+              link.href = url
+              link.download = 'photo.jpg'
+              document.body.appendChild(link)
+              link.click()
+              document.body.removeChild(link)
+
+              URL.revokeObjectURL(url)
+            })
+            .catch((error) => console.error('Error downloading photo:', error))
         })
-        .catch((error) => console.error('Error downloading photo:', error))
+        .catch((error) => console.error('Error fetching photo URL:', error))
     }
   }
+
   const success = () => {
     messageApi.open({
       type: 'success',
