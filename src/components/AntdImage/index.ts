@@ -1,0 +1,1 @@
+export { AntdImage } from './AntdImage'

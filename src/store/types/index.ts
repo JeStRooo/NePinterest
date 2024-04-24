@@ -18,6 +18,7 @@ type TLinks = {
 
 export interface IPhoto {
   id: string
+  imageId: string
   created_at: string
   width: number
   height: number
@@ -25,6 +26,15 @@ export interface IPhoto {
   description: string
   urls: TUrls
   links: TLinks
+  imageUrl: string
+}
+
+export interface IFavoritePhoto {
+  id: string
+  imageUrl: string
+  links: TLinks
+  imageId: string
+  created_at: string
 }
 
 export interface IInitialState {

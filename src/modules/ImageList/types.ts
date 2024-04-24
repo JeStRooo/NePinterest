@@ -3,7 +3,7 @@ import { SerializedError } from '@reduxjs/toolkit'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 export interface IImageList {
-  photos: IPhoto[]
-  error: FetchBaseQueryError | SerializedError | undefined
-  isLoading: boolean
+  photos?: IPhoto[]
+  error?: FetchBaseQueryError | SerializedError | undefined
+  isLoading?: boolean
 }

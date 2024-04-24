@@ -1,23 +1,35 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
-import { Image as AntImage } from 'antd'
 import Image from 'next/image'
-import { Modal } from '@/components/Modal'
 
-import { defaultModalState } from '@/modules/ImageList/constants'
+import { AntdImage } from '@/components/AntdImage'
 
 import { IImageList } from '@/modules/ImageList/types'
 
 import styles from './styles.module.scss'
 
-import { EllipsisOutlined, LoadingOutlined } from '@ant-design/icons'
+import { LoadingOutlined } from '@ant-design/icons'
 import ErrorImage from '@/assets/images/404.gif'
+import { useRouter } from 'next/router'
+import { useLikedPhotosQuery } from '@/store/service/mockApi'
+import { IPhoto } from '@/store/types'
 
 export const ImageList: FC<IImageList> = ({ photos, error, isLoading }) => {
-  const [{ isShowModal, id }, setIsShowModal] = useState(defaultModalState)
+  const {
+    data,
+    isLoading: isLoadingFavoritesPhotos,
+    error: favoritesPhotosError,
+    refetch,
+  } = useLikedPhotosQuery({})
 
-  if (error) {
+  useEffect(() => {
+    refetch()
+  }, [])
+
+  console.log(data)
+
+  if (error || favoritesPhotosError) {
     return (
       <div className={styles.messageContainer}>
         <Image
@@ -31,7 +43,7 @@ export const ImageList: FC<IImageList> = ({ photos, error, isLoading }) => {
     )
   }
 
-  if (isLoading) {
+  if (isLoading || isLoadingFavoritesPhotos) {
     return (
       <div className={styles.messageContainer}>
         <LoadingOutlined className={styles.loadingImage} />
@@ -39,44 +51,11 @@ export const ImageList: FC<IImageList> = ({ photos, error, isLoading }) => {
     )
   }
 
-  const handleShowModal = (id: string) => {
-    setIsShowModal((prevState) => ({
-      ...prevState,
-      isShowModal: true,
-      id,
-    }))
-  }
-
-  const handleClose = () => {
-    setIsShowModal(defaultModalState)
-  }
-
   return (
     <ResponsiveMasonry className={styles.container}>
       <Masonry columnsCount={4} className={styles.imageList}>
-        {photos?.map((photo) => (
-          <div key={photo.id} className={styles.imageContainer}>
-            <AntImage
-              src={photo?.urls?.regular}
-              className={styles.image}
-              loading='lazy'
-              preview={{
-                maskClassName: styles.customMask,
-              }}
-            />
-            <EllipsisOutlined
-              className={styles.moreInfo}
-              onClick={() => handleShowModal(photo?.id)}
-            />
-            {photo?.id === id && (
-              <Modal
-                isOpen={isShowModal}
-                onCancel={handleClose}
-                downloadLink={photo?.links.download_location}
-                copyImageLink={photo?.urls?.regular}
-              />
-            )}
-          </div>
+        {photos?.map((photo: IPhoto) => (
+          <AntdImage key={photo?.id} photo={photo} favoritesPhotos={data} />
         ))}
       </Masonry>
     </ResponsiveMasonry>

@@ -1,4 +1,5 @@
 export interface IHeader {
-  searchQuery: string
-  handleSearchQuery: (value: string) => void
+  isSearch: boolean
+  searchQuery?: string
+  handleSearchQuery?: (value: string) => void
 }

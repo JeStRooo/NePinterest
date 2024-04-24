@@ -17,6 +17,21 @@
   gap: 8px;
 }
 
+.loadingImageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 284px;
+  height: 100px;
+
+  margin-bottom: 40px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
 .customMask {
   border-radius: 20px;
 }
@@ -34,8 +49,8 @@
   padding: 6px;
 
   &:hover {
-    background: #f5f6f8;
-    border-radius: 8px;
+    background: #f5f5f5;
+    border-radius: 50px;
   }
 }
 
