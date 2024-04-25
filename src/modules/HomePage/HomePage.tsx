@@ -19,9 +19,7 @@ export const HomePage = () => {
     isLoading: searchLoading,
     error: searchError,
     // eslint-disable-next-line react-hooks/rules-of-hooks
-  } = searchQuery
-    ? useSearchPhotosQuery({ page, query: searchQuery, per_page: 30 })
-    : { data: null, isLoading: false, error: null }
+  } = useSearchPhotosQuery({ page, query: searchQuery, per_page: 30 })
 
   const {
     data: allPhotos,
@@ -65,7 +63,7 @@ export const HomePage = () => {
         dataLength={resultPhotos.length}
         next={loadMore}
         hasMore={!!photos && photos.length >= 30}
-        loader={<p></p>}
+        loader={null}
       >
         <ImageList photos={resultPhotos} error={error!} isLoading={isLoading} />
       </InfiniteScroll>

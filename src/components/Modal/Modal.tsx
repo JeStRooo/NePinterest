@@ -41,9 +41,7 @@ export const Modal: FC<IModal> = ({
 
               URL.revokeObjectURL(url)
             })
-            .catch((error) => console.error('Error downloading photo:', error))
         })
-        .catch((error) => console.error('Error fetching photo URL:', error))
     }
   }
 

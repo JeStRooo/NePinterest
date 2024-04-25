@@ -1,15 +1,13 @@
 import { FC } from 'react'
-
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { Button } from 'antd'
 import { AutoComplete } from '@/components/AutoComplete'
+import { IHeader } from '@/modules/Header/types'
 import Image from 'next/image'
 
 import styles from './styles.module.scss'
-
 import Avatar from '@/assets/images/Avatar.svg'
-import { IHeader } from '@/modules/Header/types'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { Button } from 'antd'
 
 export const Header: FC<IHeader> = ({
   searchQuery,

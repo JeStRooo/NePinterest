@@ -2,18 +2,15 @@ import React, { FC, useEffect } from 'react'
 
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import Image from 'next/image'
-
 import { AntdImage } from '@/components/AntdImage'
-
+import { useLikedPhotosQuery } from '@/store/service/mockApi'
+import { IPhoto } from '@/store/types'
 import { IImageList } from '@/modules/ImageList/types'
 
 import styles from './styles.module.scss'
 
 import { LoadingOutlined } from '@ant-design/icons'
 import ErrorImage from '@/assets/images/404.gif'
-import { useRouter } from 'next/router'
-import { useLikedPhotosQuery } from '@/store/service/mockApi'
-import { IPhoto } from '@/store/types'
 
 export const ImageList: FC<IImageList> = ({ photos, error, isLoading }) => {
   const {
@@ -26,8 +23,6 @@ export const ImageList: FC<IImageList> = ({ photos, error, isLoading }) => {
   useEffect(() => {
     refetch()
   }, [])
-
-  console.log(data)
 
   if (error || favoritesPhotosError) {
     return (
@@ -47,6 +42,21 @@ export const ImageList: FC<IImageList> = ({ photos, error, isLoading }) => {
     return (
       <div className={styles.messageContainer}>
         <LoadingOutlined className={styles.loadingImage} />
+      </div>
+    )
+  }
+
+  if (!error && !isLoading && !photos?.length) {
+    return (
+      <div className={styles.messageContainer}>
+        Ничего не найдено
+        <Image
+          src={ErrorImage}
+          alt='Ошибка'
+          width={480}
+          height={380}
+          className={styles.errorImage}
+        />
       </div>
     )
   }
